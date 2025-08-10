@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            width: 350px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .flashcard {
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        button {
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            width: 90%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="flashcard" id="flashcard">Question will appear here</div>
+        <button onclick="showAnswer()">Show Answer</button><br>
+        <button onclick="prevCard()">Previous</button>
+        <button onclick="nextCard()">Next</button>
+        <hr>
+        <input type="text" id="questionInput" placeholder="Enter question">
+        <input type="text" id="answerInput" placeholder="Enter answer">
+        <button onclick="addCard()">Add Flashcard</button>
+        <button onclick="deleteCard()">Delete Current</button>
+    </div>
+
+    <script>
+        let flashcards = [
+            { question: "What is the capital of France?", answer: "Paris" },
+            { question: "What is 2 + 2?", answer: "4" },
+            { question: "Who wrote Hamlet?", answer: "William Shakespeare" }
+        ];
+        
+        let currentIndex = 0;
+        let showingAnswer = false;
+
+        function showCard() {
+            document.getElementById('flashcard').innerText = flashcards[currentIndex].question;
+            showingAnswer = false;
+        }
+
+        function showAnswer() {
+            if (!showingAnswer) {
+                document.getElementById('flashcard').innerText = flashcards[currentIndex].answer;
+                showingAnswer = true;
+            } else {
+                showCard();
+            }
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % flashcards.length;
+            showCard();
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+            showCard();
+        }
+
+        function addCard() {
+            let q = document.getElementById('questionInput').value;
+            let a = document.getElementById('answerInput').value;
+            if (q && a) {
+                flashcards.push({ question: q, answer: a });
+                document.getElementById('questionInput').value = '';
+                document.getElementById('answerInput').value = '';
+                alert("Flashcard added!");
+            } else {
+                alert("Please enter both question and answer");
+            }
+        }
+
+        function deleteCard() {
+            if (flashcards.length > 0) {
+                flashcards.splice(currentIndex, 1);
+                if (currentIndex >= flashcards.length) {
+                    currentIndex = 0;
+                }
+                if (flashcards.length > 0) {
+                    showCard();
+                } else {
+                    document.getElementById('flashcard').innerText = "No flashcards available";
+                }
+            }
+        }
+
+        // Initial display
+        showCard();
+    </script>
+</body>
+</html>s
